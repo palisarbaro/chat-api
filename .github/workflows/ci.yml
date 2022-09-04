@@ -1,0 +1,30 @@
+name: CI
+
+on: push
+
+jobs:
+  lint_build_test_push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+      - name: "npm i"
+        run: npm i
+      - name: "lint"
+        run: npm run lint
+      - name: "build"
+        run: npm run build
+      - name: "test"
+        run: npm run test
+      # - name: Login to DockerHub
+      #   uses: docker/login-action@v2
+      #   with:
+      #     username: ${{ secrets.DOCKER_LOGIN }}
+      #     password: ${{ secrets.DOCKER_PASSWORD}}
+      # - name: "docker build and push"
+      #   uses: docker/build-push-action@v3
+      #   with:
+      #     context: .
+      #     push: true
+      #     tags: ${{ secrets.DOCKER_LOGIN }}/auth-server:${{ github.ref_name }}
