@@ -13,4 +13,8 @@ export default class MessageService {
         const messages = await this.messageAccessor.getLastMessages(count)
         return messages
     }
+    async getMessagesFromDate(lastDate: Date): Promise<Array<Message>>{
+        const messages = await this.messageAccessor.getMessagesFromDate(lastDate)
+        return messages
+    }
 }
