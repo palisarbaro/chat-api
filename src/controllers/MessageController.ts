@@ -1,15 +1,17 @@
 import { Request, Response, NextFunction } from 'express'
 
 import { BadRequest } from '../errors'
+import LongPoolService from '../services/LongPoolService'
 import MessageService from '../services/MessageService'
 import { responseOk } from '../utils'
 
 
 export default class MessageController {
     messageService: MessageService
-
-    constructor(messageService: MessageService){
+    longPoolService: LongPoolService
+    constructor(messageService: MessageService, longPoolService: LongPoolService){
         this.messageService =  messageService
+        this.longPoolService = longPoolService
     }
 
     async getLastMessages(req: Request, res: Response, next: NextFunction) {
@@ -33,7 +35,23 @@ export default class MessageController {
                 throw new BadRequest('text must be provided')
             }
             await this.messageService.saveMessage(author, text)
+            await this.longPoolService.sendResponses()
             responseOk(res, undefined)
+        }
+        catch(err){
+            next(err)
+        }
+    }
+
+    async subscribe(req: Request, res: Response, next: NextFunction){
+        try{
+            const lastDateString: string = req.body.lastDate
+            const lastDateTimestamp: number = Date.parse(lastDateString)
+            const lastDate: Date = new Date(lastDateTimestamp)
+            if(!lastDateTimestamp){
+                throw new BadRequest('lastDate must be provided')
+            }
+            await this.longPoolService.saveSubscribtion(lastDate, res)
         }
         catch(err){
             next(err)
