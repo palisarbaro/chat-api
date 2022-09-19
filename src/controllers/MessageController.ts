@@ -35,7 +35,6 @@ export default class MessageController {
                 throw new BadRequest('text must be provided')
             }
             await this.messageService.saveMessage(author, text)
-            console.log(77777)
             await this.longPoolService.sendResponses()
             responseOk(res, undefined)
         }
@@ -53,7 +52,6 @@ export default class MessageController {
                 throw new BadRequest('lastDate must be provided')
             }
             await this.longPoolService.saveSubscribtion(lastDate, res)
-            //responseOk(res, { kek: 'mda' })
         }
         catch(err){
             next(err)
