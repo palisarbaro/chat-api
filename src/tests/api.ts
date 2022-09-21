@@ -15,7 +15,7 @@ describe('API tests', () => {
 
     it('Cannot access without token', async function()  {
         const res = await request(app)
-            .post('/api/getLastMessages')
+            .post('/api/getMessagesUpToId')
             .send({ count: 3 })
         expect(res).have.status(401)
         expect(res.body.status).to.equal('error')
@@ -24,7 +24,7 @@ describe('API tests', () => {
 
     it('Cannot access with expired token', async function()  {
         const res = await request(app)
-            .post('/api/getLastMessages').set('Authorization', `Barier ${generateExpiredToken()}`)
+            .post('/api/getMessagesUpToId').set('Authorization', `Barier ${generateExpiredToken()}`)
             .send({ count: 3 })
         expect(res).have.status(401)
         expect(res.body.status).to.equal('error')
@@ -33,7 +33,7 @@ describe('API tests', () => {
 
     it('Can access with valid token', async function()  {
         const res = await request(app)
-            .post('/api/getLastMessages').set('Authorization', `Barier ${generateValidToken()}`)
+            .post('/api/getMessagesUpToId').set('Authorization', `Barier ${generateValidToken()}`)
             .send({ count: 3 })
         expect(res).have.status(200)
         expect(res.body.status).to.equal('ok')
