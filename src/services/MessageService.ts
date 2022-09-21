@@ -9,8 +9,8 @@ export default class MessageService {
     async saveMessage(author: string, text: string){
         await this.messageAccessor.saveMessage(author, text)
     }
-    async getLastMessages(count: number): Promise<Array<Message>>{
-        const messages = await this.messageAccessor.getLastMessages(count)
+    async getMessagesUpToId(message_id: number|undefined, count: number): Promise<Array<Message>>{
+        const messages = await this.messageAccessor.getMessagesUpToId(message_id, count)
         return messages
     }
     async getMessagesFromDate(lastDate: Date): Promise<Array<Message>>{

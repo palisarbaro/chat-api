@@ -14,13 +14,17 @@ export default class MessageController {
         this.longPoolService = longPoolService
     }
 
-    async getLastMessages(req: Request, res: Response, next: NextFunction) {
+    async getMessagesUpToId(req: Request, res: Response, next: NextFunction) {
         try{
+            const message_id = req.body.message_id
             const count: number = req.body.count
             if(!Number.isInteger(count) || count <= 0){
                 throw new BadRequest('count must be a positive integer')
             }
-            const messages = await this.messageService.getLastMessages(count)
+            if(message_id !== undefined && !Number.isInteger(count)){
+                throw new BadRequest('message_id must be integer or undefined')
+            }
+            const messages = await this.messageService.getMessagesUpToId(message_id, count)
             responseOk(res, { messages })
         }
         catch(err){
