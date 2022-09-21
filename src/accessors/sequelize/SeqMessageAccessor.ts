@@ -26,8 +26,24 @@ export default class SeqMessageAccessor implements IMessageAccessor{
     async saveMessage(author: string, text: string): Promise<void>{
         await SeqMessage.create({ author, text, date: new Date() })
     }
-    async getLastMessages(count: number): Promise<Array<Message>>{
+    async getMessagesUpToId(message_id: number|undefined, count: number): Promise<Array<Message>>{
+        let upToDate = new Date()
+        if(message_id){
+            const message = await SeqMessage.findOne({
+                where: {
+                    id: message_id
+                }
+            })
+            if(message){
+                upToDate = message.date
+            }
+        }
         const response = await SeqMessage.findAll({
+            where: {
+                date: {
+                    [Op.lte]: upToDate
+                }
+            },
             order: [['date', 'DESC']],
             limit: count
         })
