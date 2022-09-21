@@ -14,11 +14,11 @@ export default function(sequelize: Sequelize){
                 primaryKey   : true
             },
             author: {
-                type     : DataTypes.STRING,
+                type     : DataTypes.TEXT,
                 allowNull: false,
             },
             text: {
-                type     : DataTypes.STRING,
+                type     : DataTypes.TEXT,
                 allowNull: false,
             },
             date: {
